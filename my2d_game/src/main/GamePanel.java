@@ -7,21 +7,25 @@ import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
+import entity.Player;
+
 public class GamePanel extends JPanel implements Runnable {
     final int originalTileSize = 16;
     final int scale = 3;
 
-    final int tileSize = originalTileSize * scale;
+    public final int tileSize = originalTileSize * scale;
     final int maxScreenCol = 16;
     final int maxScreenRow = 12;
     final int screenWidth = tileSize * maxScreenCol;
     final int screenHeight = tileSize * maxScreenRow;
+
 
     // FPS
     int FPS = 60;
 
     KeyHandles keyH = new KeyHandles();
     Thread gameThread;
+    Player player = new Player(this, keyH);
 
     // Set player's default position
     int playerX = 100;
@@ -67,28 +71,13 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
     public void update() {
-        if (keyH.isDownPressed() == true) {
-            playerY+= playerSpeed;
-        }
-        else if (keyH.isUpPressed() == true) {
-            playerY-= playerSpeed;
-        }
-        else if (keyH.isLeftPressed() == true) {
-            playerX-= playerSpeed;
-        }
-        else if (keyH.isRightPressed() == true) {
-            playerX+= playerSpeed;
-        }
+        player.update();
     }
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g; // Gives you more options.
-
-        g2.setColor(Color.white);
-
-        g2.fillRect(playerX, playerY, tileSize, tileSize); // Represents player atm.
-
+        player.draw(g2);
         g2.dispose();
     }
 
